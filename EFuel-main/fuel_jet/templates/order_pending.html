@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: #3498db;
+            border-radius: 2px;
+        }
+        
+        .status-card {
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            text-align: center;
+            border-left: 5px solid;
+        }
+        
+        .status-card.pending {
+            border-left-color: #f39c12;
+        }
+        
+        .status-card.approved {
+            border-left-color: #27ae60;
+        }
+        
+        .status-card.paid {
+            border-left-color: #9b59b6;
+        }
+        
+        .status-card.default {
+            border-left-color: #e74c3c;
+        }
+        
+        .status-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .pending .status-icon {
+            color: #f39c12;
+        }
+        
+        .approved .status-icon {
+            color: #27ae60;
+        }
+        
+        .paid .status-icon {
+            color: #9b59b6;
+        }
+        
+        .default .status-icon {
+            color: #e74c3c;
+        }
+        
+        h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .lead {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 15px 0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn:hover {
+            background: #219653;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .pending .progress-bar {
+            width: 50%;
+            background: #f39c12;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .approved .progress-bar {
+            width: 75%;
+            background: #27ae60;
+        }
+        
+        .paid .progress-bar {
+            width: 100%;
+            background: #9b59b6;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #e8f4fc;
+            border-left: 5px solid #2980b9;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .alert::before {
+            content: '!';
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .alert-info {
+            padding-left: 40px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #2c3e50;
+            text-decoration: underline;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .status-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Order Status</h2>
+        
+        <div class="status-card {% if order_status == 'pending' %}pending{% elif order_status == 'approved' %}approved{% elif order_status == 'paid' %}paid{% else %}default{% endif %}">
+            {% if order_status == 'pending' %}
+                <div class="status-icon">⌛</div>
+                <h3>Order Placed Successfully!</h3>
+                <p class="lead">Your order is currently pending approval. Please wait while we process your request.</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                
+            {% elif order_status == 'approved' %}
+                <div class="status-icon">✓</div>
+                <h3>Order Approved!</h3>
+                <p class="lead">Your order has been approved! Please proceed to complete your payment.</p>
+                <form method="get" action="{% url 'payment_page' order.id %}">
+                    <button type="submit" class="btn">Pay Now</button>
+                </form>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                
+            {% elif order_status == 'paid' %}
+                <div class="status-icon">✓✓</div>
+                <h3>Payment Complete!</h3>
+                <p class="lead">Thank you for your payment. Your order is now being processed for delivery.</p>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+                
+            {% else %}
+                <div class="status-icon">⚠</div>
+                <h3>No Active Order</h3>
+                <p class="lead">We couldn't find any active orders associated with your account.</p>
+            {% endif %}
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        {% if order.user_notification %}
+            <div class="alert alert-info">{{ order.user_notification }}</div>
+        {% endif %}
+        
+        <a href="{% url 'order' %}" class="back-link">← Back to Order Page</a>
+    </div>
+</body>
+</html>

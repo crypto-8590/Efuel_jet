@@ -1,0 +1,101 @@
+<!-- filepath: fuel_jet/templates/payment_page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .payment-container {
+            max-width: 500px;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .payment-container h1 {
+            color: #B81C00;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+        }
+
+        .payment-container .form-group {
+            margin-bottom: 25px;
+        }
+
+        .payment-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .payment-container input[type="number"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1.2em;
+            color: #333;
+            transition: border-color 0.3s ease;
+        }
+
+        .payment-container input[type="number"]:focus {
+            outline: none;
+            border-color: #B81C00;
+            box-shadow: 0 2px 8px rgba(184, 28, 0, 0.2);
+        }
+
+        .payment-container button {
+            background-color: #B81C00;
+            color: white;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: auto;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(184, 28, 0, 0.3);
+        }
+
+        .payment-container button:hover {
+            background-color: #941600;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(184, 28, 0, 0.35);
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h1>Enter Payment Amount</h1>
+        <form method="post">
+  {% csrf_token %}
+  <div>
+    <label>Order Amount:</label>
+    <input type="text" name="amount" value="{{ order.total_price }}" readonly class="form-control" />
+  </div>
+  <button type="submit" class="btn btn-success">Pay Now</button>
+</form>
+    </div>
+</body>
+</html>
