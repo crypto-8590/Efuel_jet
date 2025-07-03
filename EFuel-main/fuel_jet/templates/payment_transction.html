@@ -1,0 +1,59 @@
+{% load tz %}
+<h1 style="display: flex; align-items: center; gap: 10px; color: rgb(99,28,0);">
+    💳 Payment & Transactions
+</h1>
+<p style="color: #a70000; margin-bottom: 25px;">
+    <h3>Track all customer payments and transaction records here...!</h3>
+</p>
+
+<div style="
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow-x: auto;
+">
+    <table style="
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    ">
+        <thead>
+        <tr style="background-color: rgb(99,28,0); color: white;">
+          <th style="padding: 16px;">👤 Customer</th>
+          <th style="padding: 16px;">📞 Phone</th>
+           <th style="padding: 16px;">🌐 Latitude</th>
+          <th style="padding: 16px;">🌐 Longitude</th>
+          <th style="padding: 16px;">⛽ Fuel Station</th>
+          <th style="padding: 16px;">🛢️ Fuel Type</th>
+          <th style="padding: 16px;">🔢 Litres</th>
+          <th style="padding: 16px;">💰 Amount</th>
+          <th style="padding: 16px;">📅 Date</th>
+         
+       </tr>
+            
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+               <td>{{ record.customer.username }}</td>
+               <td>{{ record.order.phone }}</td>
+               <td>{{ record.order.latitude }}</td>
+               <td>{{ record.order.longitude }}</td>
+               <td>{{ record.order.selected_pump }}</td>
+               <td>{{ record.order.fuel_type }}</td>
+               <td>{{ record.order.quantity }}</td>
+               <td>₹{{ record.amount }}</td>
+            <td>{{ record.date|timezone:"Asia/Kolkata"|date:"d M Y, h:i A" }}</td>
+            
+    </tr> 
+            {% empty %}
+            <tr>
+                <td colspan="9" style="padding: 20px; text-align: center; color: #888;">
+                    No payment records available.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
